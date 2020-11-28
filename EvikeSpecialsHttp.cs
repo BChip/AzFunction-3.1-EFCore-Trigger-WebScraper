@@ -23,18 +23,22 @@ namespace PullEvikeSpecials
         }
 
         [FunctionName("EvikeSpecialsHttp")]
-        public IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
+        public async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            string query = req.Query["query"];
-            log.LogInformation($"C# HTTP trigger function processed a request. Query: ${query}");
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            string query = data.query;
+
             if (string.IsNullOrEmpty(query))
             {
                 return new BadRequestResult();
             }
 
-            var response = _context.SpecialsGroupedByDate.Where(s => s.Title.Contains(query)).Take(30).OrderByDescending(s => s.Date).ToArray();
+            log.LogInformation($"C# HTTP trigger function processed a request. Query: ${query}");
+
+            var response = _context.SpecialsGroupedByDate.Where(s => s.Title.Contains(query)).OrderByDescending(s => s.Date).Take(30).ToArray();
 
             return new OkObjectResult(response);
         }

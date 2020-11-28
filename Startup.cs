@@ -14,7 +14,7 @@ namespace PullEvikeSpecials
         {
             string SqlConnection = Environment.GetEnvironmentVariable("SqlConnectionString");
             builder.Services.AddDbContext<Context>(
-                options => options.UseSqlServer(SqlConnection));
+                options => options.UseSqlServer(SqlConnection, options => options.EnableRetryOnFailure()));
         }
     }
 }
