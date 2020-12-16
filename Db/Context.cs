@@ -12,14 +12,14 @@ namespace PullEvikeSpecials.Db
         { }
 
         public DbSet<Special> Specials { get; set; }
-        public DbQuery<SpecialsGroupedByDate> SpecialsGroupedByDate { get; set; }
+        public DbQuery<SpecialsGrouped> SpecialsGrouped { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Special>()
                 .Property(b => b.CreatedAt)
                 .HasDefaultValueSql("getdate()");
-            modelBuilder.Query<SpecialsGroupedByDate>().ToView("SpecialsGroupedByDate");
+            modelBuilder.Query<SpecialsGrouped>().ToView("SpecialsGrouped");
         }
     }
 
