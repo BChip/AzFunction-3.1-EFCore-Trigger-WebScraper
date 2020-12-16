@@ -38,7 +38,7 @@ namespace PullEvikeSpecials
 
             log.LogInformation($"C# HTTP trigger function processed a request. Query: ${query}");
 
-            var response = _context.SpecialsGroupedByDate.Where(s => s.Title.Contains(query)).OrderByDescending(s => s.Date).Take(30).ToArray();
+            var response = _context.SpecialsGrouped.FromSqlRaw($"SELECT DISTINCT TOP 60 Date, Title, Price FROM SpecialsGrouped WHERE CONTAINS(Title, '\"{query}\"') ORDER BY Date DESC").ToArray();
 
             return new OkObjectResult(response);
         }

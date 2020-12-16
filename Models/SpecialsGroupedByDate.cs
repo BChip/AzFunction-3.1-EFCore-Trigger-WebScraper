@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PullEvikeSpecials.Models
 {
-    public class SpecialsGroupedByDate
+    public class SpecialsGrouped
     {
         public DateTime Date { get; private set; }
         public string Title { get; private set; }
