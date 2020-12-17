@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using PullEvikeSpecials.Db;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using PullEvikeSpecials.Models;
 
 namespace PullEvikeSpecials
 {
@@ -29,7 +30,7 @@ namespace PullEvikeSpecials
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            string query = data.query;
+            string query = $"\"{data.query}\"";
 
             if (string.IsNullOrEmpty(query))
             {
@@ -37,8 +38,7 @@ namespace PullEvikeSpecials
             }
 
             log.LogInformation($"C# HTTP trigger function processed a request. Query: ${query}");
-
-            var response = _context.SpecialsGrouped.FromSqlRaw($"SELECT DISTINCT TOP 60 CAST(CreatedAt AS DATE) as 'Date', Title, Price FROM Specials WHERE CONTAINS(Title, '\"{query}\"') ORDER BY Date DESC").ToArray();
+            var response = _context.SpecialsGrouped.FromSqlInterpolated($"dbo.Search @Name = {query}").ToList();
 
             return new OkObjectResult(response);
         }
