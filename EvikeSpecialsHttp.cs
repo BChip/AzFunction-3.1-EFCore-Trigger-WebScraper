@@ -30,7 +30,8 @@ namespace PullEvikeSpecials
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            string query = $"\"{data.query}\"";
+            string queryString = data.query;
+            string query = $"\"{queryString.Replace("\"", "")}\"";
 
             if (string.IsNullOrEmpty(query))
             {
