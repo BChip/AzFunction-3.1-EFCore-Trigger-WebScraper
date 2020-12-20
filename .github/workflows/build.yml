@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build PR
 env:
   DOTNET_VERSION: "3.1.100"
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
