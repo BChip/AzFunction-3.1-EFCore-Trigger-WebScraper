@@ -12,7 +12,7 @@ namespace PullEvikeSpecials
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            string SqlConnection = Environment.GetEnvironmentVariable("SqlConnectionString");
+            string SqlConnection = Environment.GetEnvironmentVariable("SqlConnectionStringTest");
             builder.Services.AddDbContext<Context>(
                 options => options.UseSqlServer(SqlConnection, options => options.EnableRetryOnFailure()));
         }
